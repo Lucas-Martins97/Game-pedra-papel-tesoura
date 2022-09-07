@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <style>
+        h1{
+            text-align: center;
+        }
+        .player-options img{
+            max-width: 200px;
+            opacity: 0.2;
+            cursor: pointer;
+        }
+        .enemy-options img{
+            max-width: 200px;
+            opacity: 0.2;
+    
+        }
+        .player-options, .enemy-options{
+            width: 50%;
+        }
+
+        .align{
+            display: flex;
+        }
+        .resultado{
+            text-align: center;
+        }
+       
+
+    </style>
+
+    <h1>Pedra, Papel, Tesoura</h1>
+    <hr>
+    <div class='resultado'> <h2>Resultado:</h2></div>
+    <hr>
+    <div class="align">
+        <div class="player-options">
+            <h3>Você</h3>
+            <div><img opt='pedra'src="rock.png" /></div>
+            <div><img opt='papel' src="paper.png" /></div>
+            <div><img opt='tesoura' src="scisor.png"/></div>
+        </div>
+        <div class="enemy-options">
+            <h3>CPU</h3>
+            <div><img opt='pedra' src="rock.png"/></div>
+            <div><img opt='papel' src="paper.png"/></div>
+            <div><img opt='tesoura' src="scisor.png"/></div>
+        </div>
+    </div>
+    <hr>
+   
+
+    <script>
+        var elementos = document.querySelectorAll('.player-options div > img');
+        var playerOpt = "";
+        var enemyOpt ='';
+        var enemyOptions = document.querySelectorAll('.enemy-options div > img');
+        var resultadoF = document.querySelector('.resultado h2');
+        var audioD = new Audio ('derrota.mp3');
+        var audioW = new Audio ('win.mp3');
+        var draw = new Audio ('draw.mp3');
+
+        function resetInimigo (){
+            for (var i=0; i<enemyOptions.length; i++){
+                    enemyOptions[i].style.opacity =0.2;
+                }
+            }
+
+
+        function inimigoJogar(){
+            let rand = Math.floor(Math.random()*3);
+            resetInimigo();
+            for (var i=0; i<enemyOptions.length; i++){
+                if (i==rand){
+                    enemyOptions[i].style.opacity =1;
+                    enemyOpt = enemyOptions[i].getAttribute('opt');
+                    resultadoF.style.color ='black';
+                    resultado()
+                    estilo();
+                }
+            }
+        }
+
+
+        function opacityPlayer(){
+            for(var i=0; i<elementos.length; i++ ){
+                elementos[i].style.opacity = 0.2;
+            
+            }
+        }
+        
+        for(var i=0; i<elementos.length; i++ ){
+            elementos[i].addEventListener('click', (t)=>{
+                opacityPlayer();
+                t.target.style.opacity = 1;
+                playerOpt = t.target.getAttribute('opt');
+
+                inimigoJogar();
+                // alert(playerOpt);
+            });
+        }
+
+        function resultado(){
+            if (enemyOpt == "papel" && playerOpt == "tesoura"){
+                resultadoF.innerHTML = 'Você ganhou'
+            } else if (enemyOpt == "tesoura" && playerOpt == "tesoura"){
+                resultadoF.innerHTML = 'Empate'
+            } else if (enemyOpt == "pedra" && playerOpt == "tesoura"){
+                resultadoF.innerHTML = 'Você perdeu'
+            }
+            else if (enemyOpt == "papel" && playerOpt == "pedra"){
+                resultadoF.innerHTML = 'Você perdeu'
+            } else if (enemyOpt == "tesoura" && playerOpt == "pedra"){
+                resultadoF.innerHTML = 'Você ganhou'
+            } else if (enemyOpt == "pedra" && playerOpt == "pedra"){
+                resultadoF.innerHTML = 'Empate'
+            }
+            else if (enemyOpt == "papel" && playerOpt == "papel"){
+                resultadoF.innerHTML = 'Empate'
+            } else if (enemyOpt == "tesoura" && playerOpt == "papel"){
+                resultadoF.innerHTML = 'Você perdeu'
+            } else if (enemyOpt == "pedra" && playerOpt == "papel"){
+                resultadoF.innerHTML = 'Você ganhou'
+            }
+        }
+        function estilo(){
+            if (resultadoF.innerHTML == 'Você perdeu'){
+                resultadoF.style.color = 'red';
+                audioD.play()
+            }
+            else if (resultadoF.innerHTML == 'Você ganhou'){
+                resultadoF.style.color = 'green';
+                audioW.play()
+            }
+            else if (resultadoF.innerHTML == 'Empate'){
+                resultadoF.style.color = 'black';
+                draw.play();
+            }
+        }
+    </script>
+</body>
+</html>
